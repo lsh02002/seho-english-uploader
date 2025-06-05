@@ -19,6 +19,10 @@ const EnrollPostPage = () => {
         console.log(res);
         setSelectList(res.data);
         setSelected(res.data[0].id);
+
+        if (res.headers?.accesstoken) {
+          localStorage.setItem('accessToken', res.headers?.accesstoken);
+        }
       })
       .catch((err) => {
         console.error(err);
@@ -42,9 +46,7 @@ const EnrollPostPage = () => {
 
     tempEnglish[c] = "";
 
-    for (let i = 0; i < data.length; i++) {
-      if (data[i] === "\0") {
-      }
+    for (let i = 0; i < data.length; i++) {      
       if (data[i] === "\n") {
         c++;
         tempEnglish[c] = "";
@@ -73,11 +75,14 @@ const EnrollPostPage = () => {
   };
 
   const EnrollPost = () => {
-    for (let i = 0; i < english.length; i++) {
-      console.log(result);
+    for (let i = 0; i < english.length; i++) {      
       EnrollPostApi(english[i], result[i]?.value, selected)
         .then((res) => {
           console.log(res);
+
+          if (res.headers?.accesstoken) {
+          localStorage.setItem('accessToken', res.headers?.accesstoken);
+        }
         })
         .catch((err) => {
           console.error(err);
