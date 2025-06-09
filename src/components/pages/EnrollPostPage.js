@@ -13,47 +13,39 @@ const EnrollPostPage = () => {
 
   const [targetLanguage] = useState("ko");
 
-  useEffect(() => {    
+  useEffect(() => {
     GetCategoriesApi()
       .then((res) => {
-        console.log(res);
         setSelectList(res.data);
         setSelected(res.data[0].id);
 
         if (res.headers?.accesstoken) {
-          localStorage.setItem('accessToken', res.headers?.accesstoken);
+          localStorage.setItem("accessToken", res.headers?.accesstoken);
         }
       })
       .catch((err) => {
         console.error(err);
-      });      
+      });
   }, []);
 
   const selectHandle = (e) => {
-    setSelected(e.target.value);    
-  }
-
-  const handleTranslate = async (text) => {
-    if (text) {
-      return await translateText(text, targetLanguage);
-    }
+    setSelected(e.target.value);
   };
 
   const makeEnglishArray = () => {
-    const data = inputText;
-    const tempEnglish = [];
+    let tempEnglish = [];
     let c = 0;
 
     tempEnglish[c] = "";
 
-    for (let i = 0; i < data.length; i++) {      
-      if (data[i] === "\n") {
+    for (let i = 0; i < inputText.length; i++) {
+      if (inputText[i] === "\n") {
         c++;
         tempEnglish[c] = "";
         continue;
       }
 
-      tempEnglish[c] += data[i];
+      tempEnglish[c] += inputText[i];
     }
 
     if (tempEnglish[c] === "") {
@@ -63,26 +55,34 @@ const EnrollPostPage = () => {
     setEnglish(tempEnglish);
   };
 
-  const translationArray = () => {
-    const tempResult = [];
+  const translationArray = async () => {
+    let tempResult = [];
 
     for (let i = 0; i < english.length; i++) {
-      let ko = handleTranslate(english[i]);
-      tempResult.push(ko);
+      if (english[i]) {
+        await translateText(english[i], targetLanguage)
+          .then((res) => {
+            console.log(res);
+            tempResult[i] = res.data.data.translations[0].translatedText;
+          })
+          .catch((err) => {
+            console.error(err);
+          });
+      }
     }
 
     setResult(tempResult);
   };
 
-  const EnrollPost = () => {
-    for (let i = 0; i < english.length; i++) {      
-      EnrollPostApi(english[i], result[i]?.value, selected)
+  const EnrollPost = async () => {
+    for (let i = 0; i < english.length; i++) {
+      await EnrollPostApi(english[i], result[i], selected)
         .then((res) => {
-          console.log(res);
+          console.log("db에 저장", res);
 
           if (res.headers?.accesstoken) {
-          localStorage.setItem('accessToken', res.headers?.accesstoken);
-        }
+            localStorage.setItem("accessToken", res.headers?.accesstoken);
+          }
         })
         .catch((err) => {
           console.error(err);
@@ -93,10 +93,9 @@ const EnrollPostPage = () => {
     }
   };
 
-  const processHandle = () => {
+  const processHandle = async () => {
     makeEnglishArray();
-    translationArray();
-    EnrollPost();
+    await translationArray();
   };
 
   return (
@@ -104,7 +103,7 @@ const EnrollPostPage = () => {
       <Main>
         <Title>ENROLL</Title>
         <Select onChange={selectHandle} value={selected}>
-          {selectList.map(item=>(
+          {selectList.map((item) => (
             <option value={item.id} key={item.id}>
               {item.name}
             </option>
@@ -118,13 +117,14 @@ const EnrollPostPage = () => {
             onChange={(e) => setInputText(e.target.value)}
           />
         </English>
-        <Enroll onClick={processHandle}>글 등록</Enroll>
+        <Enroll onClick={processHandle}>번역하기</Enroll>
         {english.map((en, index) => (
           <div key={index}>{en}</div>
         ))}
         {result.map((ko, index) => (
           <div key={index}>{ko}</div>
         ))}
+        <Enroll onClick={EnrollPost}>글 등록</Enroll>
       </Main>
     </Layout>
   );
