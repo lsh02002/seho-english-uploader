@@ -17,7 +17,7 @@ const EnrollPostPage = () => {
     GetCategoriesApi()
       .then((res) => {
         setSelectList(res.data);
-        setSelected(res.data[0].id);
+        setSelected(res.data[res.data.length - 1].id);
 
         if (res.headers?.accesstoken) {
           localStorage.setItem("accessToken", res.headers?.accesstoken);
