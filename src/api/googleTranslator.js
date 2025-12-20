@@ -8,6 +8,6 @@ const translateText = async (text, targetLanguage) => {
   return await axios.post(`${API_URL}?key=${API_KEY}`, {
     q: text,
     target: targetLanguage,
-  });  
+  });    
 };
 export default translateText;
