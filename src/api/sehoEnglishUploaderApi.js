@@ -8,10 +8,6 @@ const UserLogin = async (email, password) => {
   });
 };
 
-const UserSignup = async (userInfo) => {
-  return axios.post(`${BASE_URL}/user/sign-up`, userInfo);
-};
-
 const UserLogout = async () => {
   const accessToken = localStorage.getItem("accessToken");
   const refreshToken = localStorage.getItem("refreshToken");
@@ -53,4 +49,4 @@ const GetCategoriesApi = async () => {
   });
 };
 
-export { UserLogin, UserLogout, UserSignup, EnrollPostApi, GetCategoriesApi };
+export { UserLogin, UserLogout, EnrollPostApi, GetCategoriesApi };

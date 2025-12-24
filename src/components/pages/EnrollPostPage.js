@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import Layout from "../layout/Layout";
 import translateText from "../../api/googleTranslator";
-import { EnrollPostApi, GetCategoriesApi } from "../../api/sehomallApi";
+import { EnrollPostApi, GetCategoriesApi } from "../../api/sehoEnglishUploaderApi";
 
 const EnrollPostPage = () => {
   const [inputText, setInputText] = useState("");

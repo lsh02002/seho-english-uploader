@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { LoginContext } from "../../api/loginContextApi";
-import { UserLogout } from "../../api/sehomallApi";
+import { UserLogout } from "../../api/sehoEnglishUploaderApi";
 
 const Header = () => {
   const { isLogin, setIsLogin } = useContext(LoginContext);
@@ -21,18 +21,13 @@ const Header = () => {
 
   return (
     <Container>
-      <Menu>        
+      <Menu>
         <Link to="/enroll">ENROLL</Link>
         {!isLogin ? (
-          <>
-            <Link to="/signup">SIGNUP</Link>
-            <Link to="/login">LOGIN</Link>
-          </>
+          <Link to="/login">LOGIN</Link>
         ) : (
-          <>
-            <Link onClick={OnLogout}>LOGOUT</Link>
-          </>
-        )}       
+          <Link onClick={OnLogout}>LOGOUT</Link>
+        )}
       </Menu>
     </Container>
   );
