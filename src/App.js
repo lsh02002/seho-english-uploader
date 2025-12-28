@@ -38,7 +38,7 @@ function App() {
             }
           />
           <Route
-            path="/enroll"
+            path="/"
             element={
               <Suspense fallback={Loading}>
                 <Enroll />
