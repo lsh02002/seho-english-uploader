@@ -22,7 +22,7 @@ const Header = () => {
   return (
     <Container>
       <Menu>
-        <Link to="/enroll">ENROLL</Link>
+        <Link to="/">ENROLL</Link>
         {!isLogin ? (
           <Link to="/login">LOGIN</Link>
         ) : (
